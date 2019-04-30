@@ -29,3 +29,15 @@ func TestAdd(t *testing.T) {
 		}
 	}
 }
+
+
+func TestChangeTheme(t *testing.T) {
+	bar := Bar(100)
+	defaultTheme := bar.theme
+	theme := Theme{start: "(", fill: "¯", head: "-", space: "_", end: ")"}
+
+	bar.Add(1)
+	if bar.current != c.want {
+		t.Errorf("Adding %d resulted in %d expected %d")
+	}
+}
