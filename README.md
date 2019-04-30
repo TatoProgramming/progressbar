@@ -6,3 +6,7 @@ A simple progress bar in go.
 
 ## Usage
 
+## TODO
+ - Update readme
+
+
