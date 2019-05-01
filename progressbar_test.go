@@ -1,6 +1,8 @@
 package progressbar
 
-import "testing"
+import(
+	"testing"
+) 
 
 func TestBar(t *testing.T) {
 	want := 10
@@ -23,21 +25,32 @@ func TestAdd(t *testing.T) {
 		{10, 100},
 	}
 	for _, c := range cases {
-		bar.Add(c.in)
+		bar.addInt(c.in)
 		if bar.current != c.want {
 			t.Errorf("Adding %d resulted in %d expected %d", c.in, bar.current, c.want)
 		}
 	}
 }
 
-
-func TestChangeTheme(t *testing.T) {
+func TestDisplay(t *testing.T) {
 	bar := Bar(100)
-	defaultTheme := bar.theme
-	theme := Theme{start: "(", fill: "¯", head: "-", space: "_", end: ")"}
-
-	bar.Add(1)
-	if bar.current != c.want {
-		t.Errorf("Adding %d resulted in %d expected %d")
+	bar.Width = 10
+	cases := []struct {
+		amountToAdd int
+		want        string
+	}{
+		{0, "|>         |   0%"},
+		{10, "|=>        |  10%"},
+		{10, "|==>       |  20%"},
+		{20, "|====>     |  40%"},
+		{40, "|========> |  80%"},
+		{20, "|==========| 100%"},
+	}
+	for _, c := range cases {
+		bar.addInt(c.amountToAdd)
+		displayStr := bar.DisplayString()
+		if displayStr != c.want {
+			t.Errorf("Displaying the bar should have been %s was %s \n", c.want, displayStr)
+		}
 	}
 }

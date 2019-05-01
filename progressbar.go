@@ -10,11 +10,11 @@ type Progressbar struct {
 	current, total int
 	currentTime    float64
 	Width          int
-	theme Theme
+	theme          Theme
 }
 
 type Theme struct {
-	 Start, Fill, Head, Space, End string
+	Start, Fill, Head, Space, End string
 }
 
 func Bar(total int) Progressbar {
@@ -24,17 +24,23 @@ func Bar(total int) Progressbar {
 	}
 }
 
-func (b *Progressbar) ChangeTheme(theme Theme){
+func (b *Progressbar) ChangeTheme(theme Theme) {
 	b.theme = theme
 }
 
-func (b *Progressbar) Add(increment int) {
-	if increment < 0 { return }
+func (b *Progressbar) addInt(increment int) {
+	if increment < 0 {
+		return
+	}
 	if b.current+increment <= b.total {
 		b.current += increment
 	} else {
 		b.current = b.total
 	}
+}
+
+func (b *Progressbar) Add(increment int){
+	b.addInt(increment)
 	go b.Display()
 }
 
@@ -42,7 +48,10 @@ func (b *Progressbar) Display() {
 	if b.Width == 0 {
 		b.Width = 50
 	}
+	fmt.Printf("\r %s", b.DisplayString())
+}
 
+func (b *Progressbar) DisplayString() string{
 	percentage := (float64(b.current) / float64(b.total))
 
 	var buffer bytes.Buffer
@@ -56,10 +65,10 @@ func (b *Progressbar) Display() {
 	for i := 0; i < b.Width-amount-1; i++ {
 		buffer.WriteString(b.theme.Space)
 	}
-	fmt.Printf("\r %s%s%s %3.0f%%", 
+	return fmt.Sprintf("%s%s%s %3.0f%%",
 		b.theme.Start,
-		buffer.String(), 
-		b.theme.End, 
+		buffer.String(),
+		b.theme.End,
 		percentage*100.0,
 	)
 }
