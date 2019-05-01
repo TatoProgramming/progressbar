@@ -41,7 +41,7 @@ func (b *Progressbar) addInt(increment int) {
 
 func (b *Progressbar) Add(increment int){
 	b.addInt(increment)
-	go b.Display()
+	b.Display()
 }
 
 func (b *Progressbar) Display() {
